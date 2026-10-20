@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block content %}
+<section class="map-view" style="background: #edffcc">
+  <div class="container">
+    <h2>Food Distribution Map</h2>
+
+    <div class="map-controls">
+      {% if user.role == 'donor' %}
+      <button class="btn" data-type="recipients">
+        <i class="fas fa-users"></i> Show Recipients
+      </button>
+      {% else %}
+      <button class="btn" data-type="listings">
+        <i class="fas fa-utensils"></i> Show Food Listings
+      </button>
+      {% endif %}
+      <button class="btn" data-type="all">
+        <i class="fas fa-layer-group"></i> Show All
+      </button>
+    </div>
+
+    <div class="map-container">
+      <div id="map"></div>
+    </div>
+
+    <div class="map-legend">
+      <h3>Map Legend</h3>
+
+      <div class="legend-item legend-user">
+        <div class="legend-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <span>Your Location</span>
+      </div>
+
+      {% if user.role == 'donor' %}
+      <div class="legend-item legend-recipient">
+        <div class="legend-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <span>Recipient (Individual)</span>
+      </div>
+
+      <div class="legend-item legend-charity">
+        <div class="legend-icon">
+          <i class="fas fa-hands-helping"></i>
+        </div>
+        <span>Charity/Organization</span>
+      </div>
+      {% else %}
+      <div class="legend-item legend-listing">
+        <div class="legend-icon">
+          <i class="fas fa-utensils"></i>
+        </div>
+        <span>Food Listing</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  const userData = {
+      latitude: {{ user.latitude|default(17.3850)|tojson }},
+      longitude: {{ user.longitude|default(78.4867)|tojson }},
+      address: {{ user.address|default("Hyderabad")|tojson }}
+  };
+
+  const listingsData = {{ listings|tojson|safe }};
+  const recipientsData = {{ recipients|tojson|safe }};
+</script>
+{% endblock %}
